@@ -1,0 +1,36 @@
+<!-- res/layout/item_book.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/bookTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textStyle="bold"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/bookAuthorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Author"/>
+
+    <TextView
+        android:id="@+id/bookGenreText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Genre"/>
+
+    <TextView
+        android:id="@+id/bookStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unread"/>
+
+</LinearLayout>

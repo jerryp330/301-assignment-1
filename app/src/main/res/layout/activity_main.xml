@@ -1,0 +1,39 @@
+<!-- res/layout/activity_main.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="My Book Wishlist"
+        android:textSize="24sp"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="16dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bookRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/bookCountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Books: 0, Read: 0"
+        android:paddingTop="8dp"/>
+
+    <Button
+        android:id="@+id/addBookButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Book"
+        android:layout_gravity="center_horizontal"
+        android:padding="8dp"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
