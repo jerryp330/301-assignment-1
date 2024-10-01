@@ -2,12 +2,16 @@ package com.example.assignment1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+// This class is responsible for managing the user interface and interactions involved
+// in adding a new book to the wishlist or editing an existing book's details.
 public class AddEditBookActivity extends AppCompatActivity {
 
     private EditText bookTitleInput, bookAuthorInput, bookYearInput;
@@ -20,7 +24,6 @@ public class AddEditBookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_edit_book);
 
-        // Initialize UI components
         bookTitleInput = findViewById(R.id.bookTitleInput);
         bookAuthorInput = findViewById(R.id.bookAuthorInput);
         bookYearInput = findViewById(R.id.bookYearInput);
@@ -28,29 +31,39 @@ public class AddEditBookActivity extends AppCompatActivity {
         bookReadStatusSwitch = findViewById(R.id.bookReadStatusSwitch);
         saveBookButton = findViewById(R.id.saveBookButton);
 
-        // Check if we're editing a book
         Intent intent = getIntent();
+        int position = intent.getIntExtra("position", -1);
+
+        Button deleteButton = findViewById(R.id.deleteButton);
+        if (position != -1) {
+            deleteButton.setVisibility(View.VISIBLE);
+            deleteButton.setOnClickListener(v -> {
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("delete_position", position);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            });
+        } else {
+            deleteButton.setVisibility(View.GONE); // Hide delete button if adding a new book
+        }
+
         if (intent.hasExtra("title")) {
             bookTitleInput.setText(intent.getStringExtra("title"));
             bookAuthorInput.setText(intent.getStringExtra("author"));
             bookYearInput.setText(String.valueOf(intent.getIntExtra("year", 0)));
 
-            // Set the genre spinner selection
             String genre = intent.getStringExtra("genre");
             if (genre != null) {
                 int spinnerPosition = getGenreSpinnerPosition(genre);
                 bookGenreInput.setSelection(spinnerPosition);
             }
 
-            // Set the read status switch
             bookReadStatusSwitch.setChecked(intent.getBooleanExtra("isRead", false));
         }
 
-        // Set up the save button click listener
         saveBookButton.setOnClickListener(v -> saveBook());
     }
 
-    // Helper method to get the position of the genre in the spinner
     private int getGenreSpinnerPosition(String genre) {
         String[] genres = getResources().getStringArray(R.array.genres_array);
         for (int i = 0; i < genres.length; i++) {
@@ -58,10 +71,9 @@ public class AddEditBookActivity extends AppCompatActivity {
                 return i;
             }
         }
-        return 0;  // Default to the first option if not found
+        return 0;
     }
 
-    // Method to save the book details and return to the main activity
     private void saveBook() {
         String title = bookTitleInput.getText().toString();
         String author = bookAuthorInput.getText().toString();
@@ -76,12 +88,10 @@ public class AddEditBookActivity extends AppCompatActivity {
         resultIntent.putExtra("year", year);
         resultIntent.putExtra("isRead", isRead);
 
-        // If editing an existing book, include the position
         if (getIntent().hasExtra("position")) {
             resultIntent.putExtra("position", getIntent().getIntExtra("position", -1));
         }
 
-        // Set the result and finish the activity
         setResult(RESULT_OK, resultIntent);
         finish();
     }

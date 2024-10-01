@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// Typical MainActivity class,it handles
+// the main functionality of the book wishlist application.
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView bookRecyclerView;
@@ -46,23 +49,29 @@ public class MainActivity extends AppCompatActivity {
         updateBookCount();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && data != null) {
-            String title = data.getStringExtra("title");
-            String author = data.getStringExtra("author");
-            String genre = data.getStringExtra("genre");
-            int year = data.getIntExtra("year", 0);
-            boolean isRead = data.getBooleanExtra("isRead", false);
-
             if (requestCode == ADD_BOOK_REQUEST) {
+                String title = data.getStringExtra("title");
+                String author = data.getStringExtra("author");
+                String genre = data.getStringExtra("genre");
+                int year = data.getIntExtra("year", 0);
+                boolean isRead = data.getBooleanExtra("isRead", false);
                 bookList.add(new Book(title, author, genre, year, isRead));
-            } else if (requestCode == EDIT_BOOK_REQUEST) {
+                bookAdapter.notifyDataSetChanged();
 
+            } else if (requestCode == EDIT_BOOK_REQUEST) {
                 int position = data.getIntExtra("position", -1);
                 if (position != -1) {
+                    String title = data.getStringExtra("title");
+                    String author = data.getStringExtra("author");
+                    String genre = data.getStringExtra("genre");
+                    int year = data.getIntExtra("year", 0);
+                    boolean isRead = data.getBooleanExtra("isRead", false);
                     Book book = bookList.get(position);
                     book.setTitle(title);
                     book.setAuthor(author);
@@ -73,10 +82,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            bookAdapter.notifyDataSetChanged();
+            int deletePosition = data.getIntExtra("delete_position", -1);
+            if (deletePosition != -1) {
+                onBookDelete(deletePosition);
+            }
+
             updateBookCount();
         }
     }
+
+
 
     private void editBook(Book book, int position) {
         Intent intent = new Intent(MainActivity.this, AddEditBookActivity.class);
@@ -89,9 +104,15 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, EDIT_BOOK_REQUEST);
     }
 
+    public void onBookDelete(int position) {
+        bookAdapter.deleteBook(position);
+        updateBookCount();
+    }
+
     private void updateBookCount() {
         int totalBooks = bookList.size();
         int readBooks = (int) bookList.stream().filter(Book::isRead).count();
+        TextView bookCountText = findViewById(R.id.bookCountText);
         bookCountText.setText("Total Books: " + totalBooks + ", Read: " + readBooks);
     }
 }

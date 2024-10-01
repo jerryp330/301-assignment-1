@@ -12,22 +12,27 @@ import com.example.assignment1.Book;
 
 import java.util.List;
 
-public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
+// This class is a custom adapter designed to connect the book objects
+// to the user interface components.
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
     private Context context;
     private List<Book> bookList;
     private OnBookClickListener listener;
+    private OnBookDeleteListener onBookDeleteListener;
 
-    // Constructor
     public BookAdapter(Context context, List<Book> bookList, OnBookClickListener listener) {
         this.context = context;
         this.bookList = bookList;
         this.listener = listener;
     }
 
-    // This interface for handling clicks on a book item
     public interface OnBookClickListener {
         void onBookClick(Book book, int position);
+    }
+
+    public interface OnBookDeleteListener {
+        void onBookDelete(int position);
     }
 
     @NonNull
@@ -41,7 +46,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         Book currentBook = bookList.get(position);
 
-        // This binds data to the UI components
         holder.bookTitle.setText(currentBook.getTitle());
         holder.bookAuthor.setText(currentBook.getAuthor());
         holder.bookGenre.setText(currentBook.getGenre());
@@ -54,7 +58,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         return bookList.size();
     }
 
-    // ViewHolder class to represent the UI components in item_book.xml
     public static class BookViewHolder extends RecyclerView.ViewHolder {
 
         TextView bookTitle, bookAuthor, bookGenre, bookStatus;
@@ -66,5 +69,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             bookGenre = itemView.findViewById(R.id.bookGenreText);
             bookStatus = itemView.findViewById(R.id.bookStatusText);
         }
+    }
+
+    public void deleteBook(int position) {
+        bookList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, bookList.size());
     }
 }

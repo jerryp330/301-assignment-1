@@ -1,5 +1,8 @@
 package com.example.assignment1;
 
+
+// This class is pretty self-explanatory, it
+// creates the attributes and methods of the book objects.
 public class Book {
     private String title;
     private String author;
@@ -7,7 +10,6 @@ public class Book {
     private int publicationYear;
     private boolean isRead;
 
-    // Constructor
     public Book(String title, String author, String genre, int publicationYear, boolean isRead) {
         this.title = title;
         this.author = author;
@@ -16,7 +18,6 @@ public class Book {
         this.isRead = isRead;
     }
 
-    // Getters and setters
     public String getTitle() {
         return title;
     }
